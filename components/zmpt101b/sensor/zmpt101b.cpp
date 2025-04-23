@@ -39,6 +39,16 @@ int ZMPT101B::getZeroPoint()
 /// @brief Calculate root mean square (RMS) of AC valtage
 /// @param loopCount Loop count to calculate
 /// @return root mean square (RMS) of AC valtage
+
+float ZMPT101B::getInstantVoltage()
+{
+    int rawValue = analogRead(this->pin); // Считываем сырое значение с АЦП
+    int zeroPoint = this->getZeroPoint(); // Вычисляем нулевую точку
+    float voltage = (rawValue - zeroPoint) * (VREF / ADC_SCALE); // Преобразуем в напряжение
+
+    return voltage * sensitivity; // Учитываем чувствительность
+}
+
 float ZMPT101B::getRmsVoltage(uint8_t loopCount)
 {
 	double readingVoltage = 0.0f;
